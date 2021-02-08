@@ -21,8 +21,8 @@
 #include <set>
 #include <queue>
 #include <sstream>
-#include "SMRDSProblem.h"
-#include "SMRDSSolution.h"
+#include "SMSSDTProblem.h"
+#include "SMSSDTSolution.h"
 
 
 
@@ -37,7 +37,7 @@ class Tools
 	private :
 
 		//Méthode servant à calculer les completion time CI des jobs
-		static vector < int > completionTime(SMRDSProblem* LeProb, SMRDSSolution& Sol) {
+		static vector < int > completionTime(SMSSDTProblem* LeProb, SMSSDTSolution& Sol) {
 			int N = LeProb->getN();
 			vector < int > C(N, 0);
 			vector < int > p = LeProb->getP();
@@ -57,7 +57,7 @@ class Tools
 		}
 
 		//Méthode servant à calculer Le total Tardiness de la solution
-		static double tardiness(SMRDSProblem* LeProb, SMRDSSolution& Sol) {
+		static double tardiness(SMSSDTProblem* LeProb, SMSSDTSolution& Sol) {
 			int N = (int)Sol.Solution.size();
 			vector < int > d = LeProb->getD();
 			// C[j] = temps de fin du job j
@@ -75,19 +75,19 @@ class Tools
 
 			
 		//Fonction servant à évaluer une solution
-		static void Evaluer(SMRDSProblem* LeProb, SMRDSSolution& Sol) {
+		static void Evaluer(SMSSDTProblem* LeProb, SMSSDTSolution& Sol) {
 			Sol.setObj(0);
 			double obj = tardiness(LeProb, Sol);
 			Sol.setObj(obj);
 		}
 
 		//Fonction  servant à logguer
-		static void WriteReportLog(double Elapsed, SMRDSSolution BestSolution, char* methode, char* ProblemName) {
+		static void WriteReportLog(double Elapsed, SMSSDTSolution BestSolution, char* ProblemName) {
 			
 			char DateStr[9];
 			char TimeStr[9];
 			_mkdir(R"(Results)");
-			string FileName = "Results/Report_" + string(ProblemName) + methode + ".log";
+			string FileName = "Results/Report_" + string(ProblemName) + ".log";
 			fstream Streamf(FileName, ios::out | ios::app);
 
 			_strdate_s(DateStr, sizeof(DateStr));
