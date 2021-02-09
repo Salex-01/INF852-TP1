@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <conio.h>
+#include "Tools.h"
 using namespace std;
 
 /**
@@ -15,7 +16,8 @@ using namespace std;
  * Assigne les valeurs aléatoires initiales à la solution
 **/
 
-SMSSDTSolution::SMSSDTSolution(int N, bool test) {
+SMSSDTSolution::SMSSDTSolution(int N, bool test,SMSSDTProblem* probleme) {
+	LeProb = probleme;
 	// scheduling vector
 	Solution.resize(N);
 	TT.resize(N);
@@ -89,6 +91,38 @@ void SMSSDTSolution::descenteVoisinage(int N)
 		std::swap(neighborhood[0], neighborhood[i]);
 		voisinage.push_back(neighborhood);
 	}
+}
+
+void SMSSDTSolution::algoDescente()
+{
+	clock_t	Start, End;
+	descenteVoisinage(LeProb->getN());
+	double	dTheBestFitness = 100000;	//Fitness de la meilleure solution
+	SMSSDTSolution	Smeilleur = *this;	//Sauvegarde de la meilleure solution
+	Start = clock();	//Démarrer l'horloge
+	for (int i = 0; i < voisinage.size(); i++)
+	{
+		//SMSSDTSolution* tmpSol = this;
+		Solution = voisinage.at(i);
+		//int test = pSolution->voisinage.size();
+		vector<int> wala = Solution;
+
+		//pSolution = new SMSSDTSolution(LeProb->getN(), true);	//Une solution aléatoire
+
+		Tools::Evaluer(LeProb, *this);	//Évaluer la solution
+		double abc = getObj();
+		double abcd = getObj();
+		if (getObj() < dTheBestFitness) // Si améliore meilleure solution, la garder
+		{
+			Smeilleur = *this;
+			dTheBestFitness = Smeilleur.getObj();
+			i = 0;
+			descenteVoisinage(LeProb->getN());
+		}
+	}
+	End = clock(); // Arrêter le clock
+	double Elapsed = (double(End - Start)) / CLOCKS_PER_SEC;	//Calculer le temps écoulé
+	Tools::WriteReportLog(Elapsed, Smeilleur, LeProb->getNomFichier());	//Logguer le temps et la meilleure solution
 }
 
 

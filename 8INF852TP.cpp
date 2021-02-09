@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	clock_t	Start, End;	//Déclaration de variable afin de calculer le temps écoulé
-	double Elapsed = 0;	//Variable servant à calculer le temps écoulé (Différence entre End et Start
+	//double Elapsed = 0;	//Variable servant à calculer le temps écoulé (Différence entre End et Start
 	double	dTheBestFitness = 100000;	//Fitness de la meilleure solution
 	char meth = argv[3][0];
 	/*
@@ -49,31 +49,12 @@ int main(int argc, char* argv[])
 	for (int j = 0; j < atoi(argv[1]); j++)
 	{
 		Start = clock();	//Démarrer l'horloge	
-		pSolution = new SMSSDTSolution(LeProb->getN(), argv[3][0]);
-		SMSSDTSolution	Smeilleur = *pSolution;	//Sauvegarde de la meilleure solution
-		pSolution->descenteVoisinage(LeProb->getN());
+		pSolution = new SMSSDTSolution(LeProb->getN(), argv[3][0], LeProb);
+		
 		switch (meth)
 		{
 		case '1':
-			//Descente
-			for (int i = 0; i < pSolution->voisinage.size(); i++)
-			{
-				pSolution->Solution = pSolution->voisinage.at(i);
-				//int test = pSolution->voisinage.size();
-				vector<int> wala = pSolution->Solution;
-				//pSolution = new SMSSDTSolution(LeProb->getN(), true);	//Une solution aléatoire
-				vector<int> wala2 = Smeilleur.Solution;
-				Tools::Evaluer(LeProb, *pSolution);	//Évaluer la solution
-				double abc = pSolution->getObj();
-				double abcd = Smeilleur.getObj();
-				if (pSolution->getObj() < dTheBestFitness) // Si améliore meilleure solution, la garder
-				{
-					Smeilleur = *pSolution;
-					dTheBestFitness = Smeilleur.getObj();
-					i = 0;
-					pSolution->descenteVoisinage(LeProb->getN());
-				}
-			}
+			pSolution->algoDescente();
 			break;
 		case '2':
 			//Taboue
@@ -89,9 +70,6 @@ int main(int argc, char* argv[])
 
 
 		delete pSolution;
-		End = clock(); // Arrêter le clock
-		Elapsed = (double(End - Start)) / CLOCKS_PER_SEC;	//Calculer le temps écoulé
-		Tools::WriteReportLog(Elapsed, Smeilleur, LeProb->getNomFichier());	//Logguer le temps et la meilleure solution
 		dTheBestFitness = 100000;
 
 	}

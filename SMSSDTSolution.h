@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include "SMSSDTProblem.h"
+
 using namespace std;
 
 class SMSSDTSolution
@@ -13,6 +15,7 @@ protected:
 	double FctObj;
 
 public:
+	SMSSDTProblem* LeProb;
 	vector<int > Solution;
 	vector<int > CT;
 	vector<int > TT;
@@ -37,14 +40,14 @@ public:
 	 * Constructeur de la classe
 	 * Assigne les valeurs aléatoires initiales à la solution
 	**/
-	SMSSDTSolution(int N, bool test);
+	SMSSDTSolution(int N, bool test, SMSSDTProblem* probleme);
 	SMSSDTSolution(int N, char methode);
 	
 	/* Destructeur*/
 	~SMSSDTSolution();
 
 	void descenteVoisinage(int N);
-
+	void algoDescente();
 	/**
 	 * Save
 	 * Fonction permettant d'écrire la solution dans un flux
